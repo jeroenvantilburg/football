@@ -1,3 +1,18 @@
+function checkCollisions (x: number, y: number, xOthers: any[], yOthers: number[]) {
+    for (let index = 0; index <= xOthers.length; index++) {
+        let x = 0
+        if (x >= xOthers[index] && y >= yOthers[index]) {
+            return true
+        }
+    }
+    if (x < 0 || x > xMax) {
+        return true
+    }
+    if (y < 0 || y > yMax) {
+        return true
+    }
+    return false
+}
 input.onButtonPressed(Button.A, function () {
     led.stopAnimation()
     basic.clearScreen()
@@ -39,8 +54,8 @@ let scoreA = 0
 let brightnessTemp = 0
 let draaien = 0
 let kanteling = 0
-let yPlayerPrev = 0
-let xPlayerPrev = 0
+let yDir = 0
+let xDir = 0
 let yOthers: number[] = []
 let xOthers: number[] = []
 let teamOthers: number[] = []
@@ -53,11 +68,12 @@ let team = 0
 let hasBall = 0
 let yBall = 0
 let xBall = 0
+let yMax = 0
 let xMax = 0
 let waar = 0
 waar = 1
 xMax = 12
-let yMax = 8
+yMax = 8
 xBall = xMax / 2
 yBall = yMax / 2
 hasBall = 0
@@ -73,34 +89,45 @@ while (team == 0) {
     basic.pause(100)
 }
 basic.forever(function () {
-    xPlayerPrev = xPlayer
-    yPlayerPrev = yPlayer
+    xDir = 0
+    yDir = 0
     basic.pause(500)
     kanteling = input.rotation(Rotation.Pitch)
-    if (kanteling < -20 && yPlayer > hasBall) {
-        yPlayer += -1
-    } else if (kanteling > 20 && yPlayer < yMax - hasBall) {
-        yPlayer += 1
+    if (kanteling < -20) {
+        yDir = -1
+    } else if (kanteling > 20) {
+        yDir = 1
     }
     draaien = input.rotation(Rotation.Roll)
-    if (draaien < -20 && xPlayer > hasBall) {
-        xPlayer += -1
-    } else if (draaien > 20 && xPlayer < xMax - hasBall) {
-        xPlayer += 1
+    if (draaien < -20) {
+        xDir = -1
+    } else if (draaien > 20) {
+        xDir = 1
     }
-    for (let index = 0; index <= serienumbers.length; index++) {
-        if (xPlayer == xOthers[index] - hasBall && yPlayer == yOthers[index] - hasBall) {
-            xPlayer = xPlayerPrev
-            yPlayer = yPlayerPrev
+    if (xDir != 0 || yDir != 0) {
+        if (hasBall == waar) {
+            if (checkCollisions(xPlayer + 2 * xDir, yPlayer + 2 * yDir, xOthers, yOthers)) {
+                if (!(checkCollisions(xPlayer + xDir, yPlayer + yDir, xOthers, yOthers))) {
+                    xBall = xPlayer + xDir
+                    yBall = yPlayer + yDir
+                }
+            } else {
+                xPlayer += xDir
+                yPlayer += yDir
+                xBall = xPlayer + xDir
+                yBall = yPlayer + yDir
+            }
+        } else {
+            if (!(checkCollisions(xPlayer + xDir, yPlayer + yDir, xOthers, yOthers))) {
+                xPlayer += xDir
+                yPlayer += yDir
+                if (xPlayer == xBall && yPlayer == yBall) {
+                    hasBall = waar
+                    xBall += xDir
+                    yBall += yDir
+                }
+            }
         }
-    }
-    if (hasBall == waar && (xPlayer != xPlayerPrev || yPlayer != yPlayerPrev)) {
-        xBall = xPlayer + xPlayer - xPlayerPrev
-        yBall = yPlayer + yPlayer - yPlayerPrev
-    } else if (xPlayer == xBall && yPlayer == yBall) {
-        hasBall = waar
-        xBall += xPlayer - xPlayerPrev
-        yBall += yPlayer - yPlayerPrev
     }
     // determine viewport
     if (xPlayer - xOffset < 2 && xOffset > 0) {
