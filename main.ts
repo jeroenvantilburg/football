@@ -1,7 +1,6 @@
-function checkCollisions (x: number, y: number, xOthers: any[], yOthers: number[]) {
-    for (let index = 0; index <= xOthers.length; index++) {
-        let x = 0
-        if (x >= xOthers[index] && y >= yOthers[index]) {
+function checkCollisions (x: number, y: number, xList: any[], yList: any[]) {
+    for (let index = 0; index <= xList.length; index++) {
+        if (x == xList[index] && y == yList[index]) {
             return true
         }
     }
