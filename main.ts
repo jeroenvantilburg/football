@@ -165,10 +165,10 @@ basic.forever(function () {
         }
         led.plotBrightness(xOthers[index] - xOffset, yOthers[index] - yOffset, brightnessTemp)
     }
-    if (team == 1 && (xBall == xMax && yBall == yMax / 2)) {
+    if (xBall == xMax && yBall == yMax / 2) {
         scoreA += 1
         scored = 1
-    } else if (team == 2 && (xBall == 0 && yBall == yMax / 2)) {
+    } else if (xBall == 0 && yBall == yMax / 2) {
         scoreB += 1
         scored = 1
     }
