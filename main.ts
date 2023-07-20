@@ -78,29 +78,29 @@ yBall = yMax / 2
 hasBall = 0
 let yPlayer = yMax / 2
 let yOffset = yPlayer - 2
-let brightnessLines = 10
+let brightnessLines = 3
 let brightnessPlayer = 255
 let brightnessSame = 150
-let brightnessOthers = 100
+let brightnessOthers = 50
 radio.setGroup(222)
-basic.showString("Kies A of B")
+basic.showString("A of B")
 while (team == 0) {
     basic.pause(100)
 }
 basic.forever(function () {
     xDir = 0
     yDir = 0
-    basic.pause(500)
+    basic.pause(400)
     kanteling = input.rotation(Rotation.Pitch)
-    if (kanteling < -20) {
+    if (kanteling < -10) {
         yDir = -1
-    } else if (kanteling > 20) {
+    } else if (kanteling > 10) {
         yDir = 1
     }
     draaien = input.rotation(Rotation.Roll)
-    if (draaien < -20) {
+    if (draaien < -10) {
         xDir = -1
-    } else if (draaien > 20) {
+    } else if (draaien > 10) {
         xDir = 1
     }
     if (xDir != 0 || yDir != 0) {
@@ -173,7 +173,7 @@ basic.forever(function () {
     }
     if (scored == 1) {
         scored = 0
-        basic.showString("Score: " + convertToText(scoreA) + "-" + convertToText(scoreB))
+        basic.showString(" " + convertToText(scoreA) + "-" + convertToText(scoreB))
         xBall = xMax / 2
         yBall = yMax / 2
         hasBall = 0
